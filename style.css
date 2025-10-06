@@ -1,3 +1,25 @@
+/* 3-section photo container */
+.photo-sections {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    margin: -250px 0 1.5rem 0;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.photo-item {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.photo-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
 .social-icons {
     display: flex;
     flex-direction: row;

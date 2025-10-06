@@ -29,7 +29,37 @@
             <a href="#services"></a>
             <a href="#contact"></a>
         </nav>
-        <div class="main"></div>
+        <div class="main">
+            <div class="photo-sections" id="photo-sections"></div>
+            <script>
+            const imageFiles = [
+                '1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', '7.jpeg', '8.jpeg', '9.jpeg', '10.jpeg', '11.jpeg', '12.jpeg', 'WhatsApp Image 2025-10-06 at 13.10.37.jpeg'
+            ];
+            function getRandomImages(arr, n) {
+                const result = [];
+                const taken = new Set();
+                while (result.length < n && taken.size < arr.length) {
+                    const idx = Math.floor(Math.random() * arr.length);
+                    if (!taken.has(idx)) {
+                        result.push(arr[idx]);
+                        taken.add(idx);
+                    }
+                }
+                return result;
+            }
+            const selected = getRandomImages(imageFiles, 3);
+            const container = document.getElementById('photo-sections');
+            selected.forEach((file, i) => {
+                const div = document.createElement('div');
+                div.className = 'photo-item';
+                const img = document.createElement('img');
+                img.src = `images/${file}`;
+                img.alt = `Photo ${i+1}`;
+                div.appendChild(img);
+                container.appendChild(div);
+            });
+            </script>
+        </div>
     </div>
 </body>
 </html>
