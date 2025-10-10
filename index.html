@@ -37,34 +37,85 @@
             </div>
         </nav>
         <div class="main">
-            <div class="photo-sections" id="photo-sections"></div>
+            <div class="slideshow-container">
+                <button class="carousel-btn prev" onclick="previousSlide()">&#10094;</button>
+                <div class="photo-sections" id="photo-sections"></div>
+                <button class="carousel-btn next" onclick="nextSlide()">&#10095;</button>
+            </div>
             <script>
             const imageFiles = [
                 '1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', '7.jpeg', '8.jpeg', '9.jpeg', '10.jpeg', '11.jpeg', '12.jpeg', 'WhatsApp Image 2025-10-06 at 13.10.37.jpeg'
             ];
-            function getRandomImages(arr, n) {
-                const result = [];
-                const taken = new Set();
-                while (result.length < n && taken.size < arr.length) {
-                    const idx = Math.floor(Math.random() * arr.length);
-                    if (!taken.has(idx)) {
-                        result.push(arr[idx]);
-                        taken.add(idx);
-                    }
+            
+            let currentPhotoIndex = 0;
+            let slideInterval;
+            
+            function createSlideshow() {
+                const container = document.getElementById('photo-sections');
+                container.innerHTML = '';
+                
+                // Create a very long continuous repeating sequence to avoid any resets
+                const repeatingImages = [];
+                for (let i = 0; i < 100; i++) { // Create 100 repetitions for virtually infinite scrolling
+                    repeatingImages.push(...imageFiles);
                 }
-                return result;
+                
+                // Create all individual photos in continuous sequence
+                repeatingImages.forEach((file, i) => {
+                    const div = document.createElement('div');
+                    div.className = 'photo-item';
+                    const img = document.createElement('img');
+                    img.src = `images/${file}`;
+                    img.alt = `Photo ${(i % imageFiles.length) + 1}`;
+                    div.appendChild(img);
+                    container.appendChild(div);
+                });
+                
+                // Start from the beginning
+                currentPhotoIndex = 0;
             }
-            const selected = getRandomImages(imageFiles, 3);
-            const container = document.getElementById('photo-sections');
-            selected.forEach((file, i) => {
-                const div = document.createElement('div');
-                div.className = 'photo-item';
-                const img = document.createElement('img');
-                img.src = `images/${file}`;
-                img.alt = `Photo ${i+1}`;
-                div.appendChild(img);
-                container.appendChild(div);
-            });
+            
+            function showCurrentPhotos() {
+                const container = document.getElementById('photo-sections');
+                // Calculate offset to slide one photo at a time
+                const containerWidth = container.parentElement.offsetWidth;
+                const photoWidth = (containerWidth + (2 * 16)) / 3; // Width of one photo including gap (2rem = 32px, split = 16px each side)
+                const offset = -(currentPhotoIndex * photoWidth);
+                container.style.transform = `translateX(${offset}px)`;
+            }
+            
+            function slideToNext() {
+                currentPhotoIndex++;
+                showCurrentPhotos();
+            }
+            
+            function nextSlide() {
+                slideToNext();
+                resetAutoSlide();
+            }
+            
+            function previousSlide() {
+                currentPhotoIndex--;
+                if (currentPhotoIndex < 0) {
+                    currentPhotoIndex = 0;
+                }
+                showCurrentPhotos();
+                resetAutoSlide();
+            }
+            
+            function startSlideshow() {
+                slideInterval = setInterval(slideToNext, 5000);
+            }
+            
+            function resetAutoSlide() {
+                clearInterval(slideInterval);
+                startSlideshow();
+            }
+            
+            // Initialize slideshow
+            createSlideshow();
+            showCurrentPhotos();
+            startSlideshow();
             </script>
         </div>
     </div>
